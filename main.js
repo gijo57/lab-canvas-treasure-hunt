@@ -2,7 +2,7 @@
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
-const width = canvas.width;
+const width = canvas.width - 300;
 const height = canvas.height;
 
 class Character {
@@ -107,8 +107,10 @@ function drawTreasure() {
 }
 
 function drawScore() {
+  context.fillStyle = 'white';
+  context.fillRect(550, 0, 200, 200);
   context.fillStyle = 'black';
-  context.fillText(`Player 1 score: ${player.score}`, 450, 490);
+  context.fillText(`Player 1 score: ${player.score}`, 600, 100);
 }
 
 function drawEverything() {
