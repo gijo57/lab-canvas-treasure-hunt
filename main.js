@@ -15,6 +15,7 @@ class Character {
 
   addScore() {
     this.score++;
+    drawScore();
   }
   moveUp() {
     this.direction = 'up';
@@ -55,6 +56,7 @@ class Treasure {
 }
 const treasure = new Treasure();
 const player = new Character(0, 0);
+const player2 = new Character(9, 9);
 
 function drawGrid() {
   for (let i = 0; i < 10; i++) {
@@ -78,12 +80,21 @@ function drawGrid() {
 
 function drawPlayer() {
   const playerImage = new Image();
+  const player2Image = new Image();
   playerImage.src = `./images/character-${player.direction}.png`;
+  player2Image.src = `./images/character-${player2.direction}.png`;
   playerImage.addEventListener('load', () => {
     context.drawImage(
       playerImage,
       (player.row * width) / 10,
       (player.col * height) / 10
+    );
+  });
+  player2Image.addEventListener('load', () => {
+    context.drawImage(
+      player2Image,
+      (player2.row * width) / 10,
+      (player2.col * height) / 10
     );
   });
 }
@@ -95,6 +106,9 @@ function drawTreasure() {
     if (player.row === treasure.row && player.col === treasure.col) {
       treasure.setRandomPosition();
       player.addScore();
+    } else if (player2.row === treasure.row && player2.col === treasure.col) {
+      treasure.setRandomPosition();
+      player2.addScore();
     }
     context.drawImage(
       treasureImage,
@@ -110,7 +124,9 @@ function drawScore() {
   context.fillStyle = 'white';
   context.fillRect(550, 0, 200, 200);
   context.fillStyle = 'black';
+  context.font = '20px Arial';
   context.fillText(`Player 1 score: ${player.score}`, 600, 100);
+  context.fillText(`Player 2 score: ${player2.score}`, 600, 140);
 }
 
 function drawEverything() {
@@ -137,6 +153,22 @@ window.addEventListener('keydown', (e) => {
       player.moveDown();
       break;
   }
+
+  switch (e.key) {
+    case 'a':
+      player2.moveLeft();
+      break;
+    case 'w':
+      player2.moveUp();
+      break;
+    case 'd':
+      player2.moveRight();
+      break;
+    case 's':
+      player2.moveDown();
+      break;
+  }
+
   drawEverything();
 });
 
