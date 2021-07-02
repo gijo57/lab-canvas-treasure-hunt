@@ -19,26 +19,26 @@ class Character {
   }
   moveUp() {
     this.direction = 'up';
-    if (this.col > 0) {
-      this.col--;
-    }
-  }
-  moveDown() {
-    this.direction = 'down';
-    if (this.col < 9) {
-      this.col++;
-    }
-  }
-  moveLeft() {
-    this.direction = 'left';
     if (this.row > 0) {
       this.row--;
     }
   }
-  moveRight() {
-    this.direction = 'right';
+  moveDown() {
+    this.direction = 'down';
     if (this.row < 9) {
       this.row++;
+    }
+  }
+  moveLeft() {
+    this.direction = 'left';
+    if (this.col > 0) {
+      this.col--;
+    }
+  }
+  moveRight() {
+    this.direction = 'right';
+    if (this.col < 9) {
+      this.col++;
     }
   }
 }
@@ -86,15 +86,15 @@ function drawPlayer() {
   playerImage.addEventListener('load', () => {
     context.drawImage(
       playerImage,
-      (player.row * width) / 10,
-      (player.col * height) / 10
+      (player.col * height) / 10,
+      (player.row * width) / 10
     );
   });
   player2Image.addEventListener('load', () => {
     context.drawImage(
       player2Image,
-      (player2.row * width) / 10,
-      (player2.col * height) / 10
+      (player2.col * height) / 10,
+      (player2.row * width) / 10
     );
   });
 }
@@ -129,44 +129,46 @@ function drawScore() {
   context.fillText(`Player 2 score: ${player2.score}`, 600, 140);
 }
 
+function executeMoves() {
+  Object.keys(keyPressController).forEach((key) => {
+    keyPressController[key].pressed && keyPressController[key].func();
+  });
+}
+
 function drawEverything() {
   drawGrid();
+  executeMoves();
   drawPlayer();
   drawTreasure();
   drawScore();
 }
 
+const keyPressController = {
+  ArrowLeft: { pressed: false, func: player.moveLeft.bind(player) },
+  ArrowRight: { pressed: false, func: player.moveRight.bind(player) },
+  ArrowUp: { pressed: false, func: player.moveUp.bind(player) },
+  ArrowDown: { pressed: false, func: player.moveDown.bind(player) },
+  a: { pressed: false, func: player2.moveLeft.bind(player2) },
+  d: { pressed: false, func: player2.moveRight.bind(player2) },
+  w: { pressed: false, func: player2.moveUp.bind(player2) },
+  s: { pressed: false, func: player2.moveDown.bind(player2) }
+};
+
 window.addEventListener('keydown', (e) => {
   e.preventDefault();
 
-  switch (e.key) {
-    case 'ArrowLeft':
-      player.moveLeft();
-      break;
-    case 'ArrowUp':
-      player.moveUp();
-      break;
-    case 'ArrowRight':
-      player.moveRight();
-      break;
-    case 'ArrowDown':
-      player.moveDown();
-      break;
+  if (keyPressController[e.key]) {
+    keyPressController[e.key].pressed = true;
   }
 
-  switch (e.key) {
-    case 'a':
-      player2.moveLeft();
-      break;
-    case 'w':
-      player2.moveUp();
-      break;
-    case 'd':
-      player2.moveRight();
-      break;
-    case 's':
-      player2.moveDown();
-      break;
+  drawEverything();
+});
+
+window.addEventListener('keyup', (e) => {
+  e.preventDefault();
+
+  if (keyPressController[e.key]) {
+    keyPressController[e.key].pressed = false;
   }
 
   drawEverything();
