@@ -104,6 +104,7 @@ function drawTreasure() {
   treasureImage.src = './images/treasure.png';
   treasureImage.addEventListener('load', () => {
     if (player.row === treasure.row && player.col === treasure.col) {
+      console.log('hi');
       treasure.setRandomPosition();
       player.addScore();
     } else if (player2.row === treasure.row && player2.col === treasure.col) {
@@ -112,8 +113,8 @@ function drawTreasure() {
     }
     context.drawImage(
       treasureImage,
-      (treasure.row * width) / 10,
       (treasure.col * height) / 10,
+      (treasure.row * width) / 10,
       50,
       50
     );
