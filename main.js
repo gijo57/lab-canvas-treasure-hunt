@@ -61,13 +61,6 @@ const player2 = new Character(9, 9);
 function drawGrid() {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-      context.fillStyle = 'white';
-      context.fillRect(
-        (width / 10) * i,
-        (height / 10) * j,
-        width / 10,
-        height / 10
-      );
       context.strokeRect(
         (width / 10) * i,
         (height / 10) * j,
@@ -121,8 +114,6 @@ function drawTreasure() {
 }
 
 function drawScore() {
-  context.fillStyle = 'white';
-  context.fillRect(550, 0, 200, 200);
   context.fillStyle = 'black';
   context.font = '20px Arial';
   context.fillText(`Player 1 score: ${player.score}`, 600, 100);
@@ -136,6 +127,7 @@ function executeMoves() {
 }
 
 function drawEverything() {
+  context.clearRect(0, 0, width + 300, height);
   drawGrid();
   executeMoves();
   drawPlayer();
